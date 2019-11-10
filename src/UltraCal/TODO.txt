@@ -2,6 +2,29 @@
 	[ ] Janet feedback
 
 
+	[ ] For Janet
+		[x] Note taking areas where there are empty boxes
+		[x] Year Title
+		[ ] Previous month/ next month, last two squares
+		[ ] Holidays  (https://services.timeanddate.com/api/country-details.html?country=us)
+			- Use a script to refresh holiday json files so you don't have to keep querying on every run
+			- Maybe query if the local data file is not already present
+		[ ] Generate N Months starting from date
+	[ ] Extras:
+		[ ] Column headers
+		[ ] Mail merge special Dates
+		[ ] Select Font
+		[ ] Control Font dimentions
+		[ ] Day of year/ day remaining
+		[ ] Monthly TODO checkboxes 
+
+
+	[ ] Printing at Staples: Color Blueprints 18"x24"  https://documents.staples.com/ASP1/SmartStore.aspx?QxwAkrpHdoTpJQ4/NUWILGhXVTrEwdxHw8Lxmdsq0ed5ORARK3ida94N9LnWhlVT#!/CategoryHome/243
+
+
+=========== DONE ===========================================
+
+
 	[x] Calendar parts:
 		[x] Better Borders for date boxes
 		[x] Month Title 
@@ -16,19 +39,3 @@
 			#######
 			#######
 			##
-	[ ] For Janet
-		[ ] Column headers
-		[ ] Note taking areas where there are empty boxes
-		[ ] Year Title
-		[ ] Previous month/ next month, last two squares
-		[ ] Holidays
-		[ ] Generate N Months starting from date
-	[ ] Extras:
-		[ ] Mail merge special Dates
-		[ ] Select Font
-		[ ] Control Font dimentions
-		[ ] Day of year/ day remaining
-		[ ] Monthly TODO checkboxes 
-
-
-	[ ] Printing at Staples: Color Blueprints 18"x24"  https://documents.staples.com/ASP1/SmartStore.aspx?QxwAkrpHdoTpJQ4/NUWILGhXVTrEwdxHw8Lxmdsq0ed5ORARK3ida94N9LnWhlVT#!/CategoryHome/243

@@ -104,7 +104,7 @@ namespace UltraCal
             int x = 0;
             var titleWidth = _model.DocumentWidthInches * _model.DPI - pageMargin * 2;
 
-            var month = 7;
+            var month = 2;
             var date = new DateTime(2019, month, 1,0,0,0);
             x = (int)date.DayOfWeek;
             int day = 1;
@@ -114,6 +114,46 @@ namespace UltraCal
             {
                 y = -1;
                 titleWidth -= (dateBoxWidth * (7 - x));
+            }
+
+            var noteBackgroundBrush = new SolidColorBrush(Color.FromRgb(242, 242, 242));
+
+            // Draw a note taking box if there is room at the top
+            if (x > 0 && y > -1)
+            {
+                var noteBox = CreateDateBox(x * dateBoxWidth, dateBoxHeight, null);
+                noteBox.Background = noteBackgroundBrush;
+                pageCanvas.Children.Add(noteBox);
+                Canvas.SetTop(noteBox, pageMargin + pageTopArea);
+                Canvas.SetLeft(noteBox, pageMargin);
+            }
+
+            for (; y < rowsPerPage; y++)
+            {
+                for (; x < boxesPerRow; x++)
+                {
+
+                    var dateBox = CreateDateBox(dateBoxWidth, dateBoxHeight, day.ToString());
+                    day++;
+
+                    Canvas.SetTop(dateBox, y * dateBoxHeight + pageMargin + pageTopArea);
+                    Canvas.SetLeft(dateBox, x * dateBoxWidth + pageMargin);
+                    pageCanvas.Children.Add(dateBox);
+                    if (day > daysInMonth)
+                    {
+                        // draw a note taking box if there is room at the bottom
+                        if (x < boxesPerRow - 1)
+                        {
+                            var noteBox = CreateDateBox((boxesPerRow - x) * dateBoxWidth, dateBoxHeight, null);
+                            noteBox.Background = noteBackgroundBrush;
+                            pageCanvas.Children.Add(noteBox);
+                            Canvas.SetTop(noteBox, pageMargin + y * dateBoxHeight +  pageTopArea);
+                            Canvas.SetLeft(noteBox, pageMargin + x * dateBoxWidth);
+                        }
+                        break;
+                    }
+                }
+                x = 0;
             }
 
             var titleLabel = new Label()
@@ -130,28 +170,31 @@ namespace UltraCal
                 HorizontalContentAlignment = HorizontalAlignment.Center,
                 Margin = new Thickness(0, -3 * _model.DPI, 0, 0)
             };
-
             titleLabel.RenderTransform = new ScaleTransform(1, 1.3);
-
-            for (; y < rowsPerPage; y++)
-            {
-                for (; x < boxesPerRow; x++)
-                {
-
-                    var dateBox = CreateDateBox(dateBoxWidth, dateBoxHeight, day.ToString());
-                    day++;
-
-                    Canvas.SetTop(dateBox, y * dateBoxHeight + pageMargin + pageTopArea);
-                    Canvas.SetLeft(dateBox, x * dateBoxWidth + pageMargin);
-                    pageCanvas.Children.Add(dateBox);
-                    if (day > daysInMonth) break;
-                }
-                x = 0;
-            }
 
             pageCanvas.Children.Add(titleLabel);
             Canvas.SetTop(titleLabel, pageMargin);
             Canvas.SetLeft(titleLabel, pageMargin);
+
+            var yearLabel = new Label()
+            {
+                Foreground = Brushes.Black,
+                //Background = Brushes.Red,
+                Content = "  " + date.ToString("yyyy") + "  ",
+                FontFamily = _model.NumberFontFamily,
+                FontSize = ((dateBoxHeight) * .25) / _model.DPI * 72,
+                FontWeight = FontWeights.UltraBold,
+                Width = titleWidth,
+                Height = dateBoxHeight * .25,
+                Padding = new Thickness(0),
+                VerticalContentAlignment = VerticalAlignment.Center,
+                HorizontalContentAlignment = HorizontalAlignment.Center,
+            };
+
+            pageCanvas.Children.Add(yearLabel);
+            Canvas.SetTop(yearLabel, pageMargin/2);
+            Canvas.SetLeft(yearLabel, pageMargin);
+
 
             var container = new Grid()
             {
