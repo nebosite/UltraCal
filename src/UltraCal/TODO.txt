@@ -1,0 +1,34 @@
+﻿TODO
+	[ ] Janet feedback
+
+
+	[x] Calendar parts:
+		[x] Better Borders for date boxes
+		[x] Month Title 
+		[x] Date numbers
+		[x] light graph for writing
+			- At least 7 lines per date box
+		[x] Handle overflows as full date boxes
+			- add extra boxes to top and shift things:
+			 tttt #
+			#######
+			#######
+			#######
+			#######
+			##
+	[ ] For Janet
+		[ ] Column headers
+		[ ] Note taking areas where there are empty boxes
+		[ ] Year Title
+		[ ] Previous month/ next month, last two squares
+		[ ] Holidays
+		[ ] Generate N Months starting from date
+	[ ] Extras:
+		[ ] Mail merge special Dates
+		[ ] Select Font
+		[ ] Control Font dimentions
+		[ ] Day of year/ day remaining
+		[ ] Monthly TODO checkboxes 
+
+
+	[ ] Printing at Staples: Color Blueprints 18"x24"  https://documents.staples.com/ASP1/SmartStore.aspx?QxwAkrpHdoTpJQ4/NUWILGhXVTrEwdxHw8Lxmdsq0ed5ORARK3ida94N9LnWhlVT#!/CategoryHome/243

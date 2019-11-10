@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2047
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UltraCal", "UltraCal\UltraCal.csproj", "{42A8833F-5F0B-4DB3-9E45-606AFB894F24}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{506C1085-9C2A-40EF-9A6F-B9E673336F99}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{42A8833F-5F0B-4DB3-9E45-606AFB894F24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42A8833F-5F0B-4DB3-9E45-606AFB894F24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42A8833F-5F0B-4DB3-9E45-606AFB894F24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42A8833F-5F0B-4DB3-9E45-606AFB894F24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{506C1085-9C2A-40EF-9A6F-B9E673336F99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{506C1085-9C2A-40EF-9A6F-B9E673336F99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{506C1085-9C2A-40EF-9A6F-B9E673336F99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{506C1085-9C2A-40EF-9A6F-B9E673336F99}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1D573F07-5297-46E8-A02B-418156815091}
+	EndGlobalSection
+EndGlobal

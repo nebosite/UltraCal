@@ -1,0 +1,1 @@
+This folder contains the executables that will generate cards from data
