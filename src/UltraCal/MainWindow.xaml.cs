@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Printing;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -39,7 +41,14 @@ namespace UltraCal
             InitializeComponent();
             this.DataContext = _model;
             _model.PropertyChanged += _model_PropertyChanged;
-       
+
+            var me = Assembly.GetExecutingAssembly();
+            var resouceName = me
+                .GetManifestResourceNames()
+                .Where(n => n.Contains("2019Holidays"))
+                .FirstOrDefault();
+
+            var foo = _model.GetHoliday(DateTime.Now);
         }
 
         bool _first = true;

@@ -5,11 +5,17 @@
 	[ ] For Janet
 		[x] Note taking areas where there are empty boxes
 		[x] Year Title
-		[ ] Previous month/ next month, last two squares
-		[ ] Holidays  (https://services.timeanddate.com/api/country-details.html?country=us)
+		[x] Previous month/ next month, last two squares
+		[ ] Holidays  (https://calendarific.com/api-documentation)
 			- Use a script to refresh holiday json files so you don't have to keep querying on every run
 			- Maybe query if the local data file is not already present
+			- api key: 57b5efbe22bb22a85c15dd4f1120562d7233a001
+			- https://calendarific.com/api/v2
+			- Example: https://calendarific.com/api/v2/json?api_key=57b5efbe22bb22a85c15dd4f1120562d7233a001&country=US&year=2020
+
 		[ ] Generate N Months starting from date
+		[ ] Lunar cycles
+			https://www.codeproject.com/articles/100174/calculate-and-draw-moon-phase
 	[ ] Extras:
 		[ ] Column headers
 		[ ] Mail merge special Dates
