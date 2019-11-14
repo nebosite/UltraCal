@@ -142,7 +142,7 @@ namespace UltraCal
                 for (; x < boxesPerRow; x++)
                 {
 
-                    var dateBox = CreateDateBox(dateBoxWidth, dateBoxHeight, day.ToString());
+                    var dateBox = CreateDateBox(dateBoxWidth, dateBoxHeight, date.AddDays(day-1));
                     day++;
 
                     Canvas.SetTop(dateBox, y * dateBoxHeight + pageMargin + pageTopArea);
@@ -329,7 +329,7 @@ namespace UltraCal
         /// Create the little box that shows a Date
         /// </summary>
         //-----------------------------------------------------------------------------
-        Grid CreateDateBox(double width, double height, string number)
+        Grid CreateDateBox(double width, double height, DateTime? date = null)
         {
             var dateBox = new Grid()
             {
@@ -364,13 +364,13 @@ namespace UltraCal
                 Height = height
             });
 
-            if(!string.IsNullOrEmpty(number))
+            if(date != null)
             {
                 var boxHeightInches = height / _model.DPI;
                 dateBox.Children.Add(new Label()
                 {
                     Foreground = Brushes.Black,
-                    Content = number,
+                    Content = date.Value.Day,
                     FontFamily = _model.NumberFontFamily,
                     FontSize = boxHeightInches * _model.DateNumberHeightFraction * 72,
                     FontWeight = FontWeights.Bold,
@@ -378,6 +378,26 @@ namespace UltraCal
                     Height = height
                 });
 
+                var smallLabelHeight = height * 0.13;
+                var smallFontSize = smallLabelHeight / _model.DPI * 72 * .6;
+
+                var holiday = _model.GetHoliday(date.Value);
+                if(holiday != null)
+                {
+
+                    var smallText = new Label()
+                    {
+                        Content = $" {holiday.name.ToLower()} ",
+                        FontFamily = _model.NumberFontFamily,
+                        FontSize = smallFontSize,
+                        Width = width,
+                        Height = smallLabelHeight,
+                        HorizontalContentAlignment = HorizontalAlignment.Center,
+                        VerticalContentAlignment = VerticalAlignment.Center,
+                        VerticalAlignment = VerticalAlignment.Bottom
+                    };
+                    dateBox.Children.Add(smallText);
+                }
             }
 
             return dateBox;
