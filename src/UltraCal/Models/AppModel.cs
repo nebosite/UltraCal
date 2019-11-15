@@ -13,13 +13,6 @@ using System.Windows.Media;
 
 namespace UltraCal
 {
-    public enum CardUnits
-    {
-        Millimeters,
-        Centimeters,
-        Inches,
-    }
-
     public class AppModel : BaseModel
     {
         public const string LAYOUT = "__LAYOUT__";
@@ -30,90 +23,32 @@ namespace UltraCal
         public int DocumentHeightInches => 24;
         public Transform DocumentLayoutTransform => new ScaleTransform(.5, .5);
 
+
         /// <summary>
-        /// AvailableUnits
+        /// Start Date
         /// </summary>
-        public CardUnits[] AvailableUnits => Enum.GetValues(typeof(CardUnits)).Cast<CardUnits>().ToArray();
-        private CardUnits _selectedUnits = CardUnits.Inches;
-        public CardUnits SelectedUnits
+        private DateTime _startDate = new DateTime(DateTime.Now.Year + 1, 1, 1);
+        public DateTime StartDate
         {
-            get => _selectedUnits;
+            get => _startDate;
             set
             {
-                var oldUnits = SelectedUnits;
-                _selectedUnits = value;
-                _cardWidth = ConvertMeasure(CardWidth, oldUnits, SelectedUnits);
-                _cardHeight = ConvertMeasure(CardHeight, oldUnits, SelectedUnits);
-                _overDraw = ConvertMeasure(OverDraw, oldUnits, SelectedUnits);
-                _minMargin = ConvertMeasure(MinMargin, oldUnits, SelectedUnits);
-                RaisePropertyChanged(nameof(SelectedUnits));
-                RaisePropertyChanged(nameof(CardHeight));
-                RaisePropertyChanged(nameof(CardWidth));
-                RaisePropertyChanged(nameof(OverDraw));
-                RaisePropertyChanged(nameof(MinMargin));
-                RaisePropertyChanged(LAYOUT);
+                _startDate = value;
+                RaisePropertyChanged(nameof(StartDate));
             }
         }
 
         /// <summary>
-        /// Card Width
+        /// End Date
         /// </summary>
-        private double _cardWidth = 2.5;
-        public double CardWidth
+        private DateTime _endDate = new DateTime(DateTime.Now.Year + 1, 12, 1);
+        public DateTime EndDate
         {
-            get => _cardWidth;
+            get => _endDate;
             set
             {
-                _cardWidth = value;
-                RaisePropertyChanged(nameof(CardWidth));
-                RaisePropertyChanged(LAYOUT);
-            }
-        }
-
-        /// <summary>
-        /// Card Height
-        /// </summary>
-        private double _cardHeight = 3.5;
-        public double CardHeight
-        {
-            get => _cardHeight;
-            set
-            {
-                _cardHeight = value;
-                RaisePropertyChanged(nameof(CardHeight));
-                RaisePropertyChanged(LAYOUT);
-            }
-        }
-
-
-        /// <summary>
-        /// OverDraw
-        /// </summary>
-        private double _overDraw = 0.06;
-        public double OverDraw
-        {
-            get => _overDraw;
-            set
-            {
-                _overDraw = value;
-                RaisePropertyChanged(nameof(OverDraw));
-                RaisePropertyChanged(LAYOUT);
-            }
-        }
-
-
-        /// <summary>
-        /// MinMargin
-        /// </summary>
-        private double _minMargin = 0.25;
-        public double MinMargin
-        {
-            get => _minMargin;
-            set
-            {
-                _minMargin = value;
-                RaisePropertyChanged(nameof(MinMargin));
-                RaisePropertyChanged(LAYOUT);
+                _endDate = value;
+                RaisePropertyChanged(nameof(EndDate));
             }
         }
 
@@ -211,7 +146,11 @@ namespace UltraCal
                         )
                     {
                         var date = DateTime.Parse(holiday.date.iso);
-                        lookup.Add(date.DayOfYear, holiday);
+                        if(lookup.ContainsKey(date.DayOfYear))
+                        {
+                            Debug.WriteLine("Losing this holiday: " + holiday.name);
+                        }
+                        lookup[date.DayOfYear] =holiday;
                     }
                 }
             }
@@ -254,35 +193,6 @@ namespace UltraCal
                 Debug.WriteLine($"WEB ERROR: ({e.Status}) {e.Message}: {result}");
                 return null;
             }
-        }
-
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// Convert a number from old units to new units
-        /// </summary>
-        //-------------------------------------------------------------------------------
-        public double ConvertMeasure(double number, CardUnits oldUnits, CardUnits newUnits)
-        {
-            double millimeters;
-            switch(oldUnits)
-            {
-                case CardUnits.Millimeters: millimeters = number; break;
-                case CardUnits.Centimeters: millimeters = number * 10.0; break;
-                case CardUnits.Inches: millimeters = number / 0.0393701; break;
-                default: millimeters = 0; break;
-            }
-
-            double newValue = 0;
-            switch (newUnits)
-            {
-                case CardUnits.Millimeters: newValue = millimeters; break;
-                case CardUnits.Centimeters: newValue = millimeters / 10.0; break;
-                case CardUnits.Inches: newValue = millimeters * 0.0393701; break;
-                default: newValue = 0; break;
-            }
-
-            // round to the 3rd decimal place
-            return Math.Round(newValue * 10000) / 10000.0;
         }
     }
 }

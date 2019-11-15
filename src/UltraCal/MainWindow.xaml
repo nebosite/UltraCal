@@ -13,37 +13,20 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Background="LightBlue">
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="30*" />
-                    <ColumnDefinition Width="30*" />
-                    <ColumnDefinition Width="30*" />
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0">
-                </StackPanel>
-                <StackPanel Grid.Column="1">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Start Date:" Width="100" HorizontalContentAlignment="Right" />
+                        <DatePicker SelectedDate="{Binding StartDate}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="End Date:" Width="100" HorizontalContentAlignment="Right" />
+                        <DatePicker SelectedDate="{Binding EndDate}" />
+                    </StackPanel>
                 </StackPanel>
             </Grid>
         </Grid>
         <Grid Grid.Row="1" Background="LightGray">
-            <DocumentViewer  x:Name="PageContainer">
-                
-            </DocumentViewer>
-                    <!--
-            <ScrollViewer HorizontalScrollBarVisibility="Visible">
-                <StackPanel x:Name="PageContainer" LayoutTransform="{Binding DocumentLayoutTransform}">
-                    <Grid 
-                        Width="{Binding DocumentPixelWidth}" 
-                        Height="{Binding DocumentPixelHeight}"  >
-                        <Canvas Background="White" x:Name="PrintMe" ClipToBounds="True">
-                            <Label Content="HELLO" Canvas.Left="480" Canvas.Top="230" FontSize="100"/>
-                            <Ellipse Fill="LightGreen" Width="257" Height="195" Canvas.Left="-56" Canvas.Top="-44" />
-                            <Ellipse Fill="Pink" Width="257" Height="195" Canvas.Left="589" Canvas.Top="-44" />
-                            <Ellipse Fill="LightYellow" Width="257" Height="195" Canvas.Left="-56" Canvas.Top="935.3" />
-                            <Ellipse Fill="LightGray" Width="257" Height="195" Canvas.Left="680" Canvas.Top="935" />
-                        </Canvas>
-                    </Grid>
-                </StackPanel>
-            </ScrollViewer>-->
+            <DocumentViewer  x:Name="PageContainer" />
         </Grid>
     </Grid>
 </Window>

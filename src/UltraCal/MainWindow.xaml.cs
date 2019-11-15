@@ -76,7 +76,7 @@ namespace UltraCal
         //-----------------------------------------------------------------------------
         private void _model_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if(e.PropertyName == AppModel.LAYOUT)
+            //if(e.PropertyName == AppModel.LAYOUT)
             {
                 RecalculateLayout();
             }
@@ -104,142 +104,158 @@ namespace UltraCal
 
             _printablePages.Clear();
 
-            var pageCanvas = new Canvas()
+            var year = _model.StartDate.Year;
+            var month = _model.StartDate.Month;
+            var endYear = _model.EndDate.Year;
+            var endMonth = _model.EndDate.Month;
+
+            while(true)
             {
-                Background = Brushes.White,
-                ClipToBounds = true,
-            };
-
-            int y = 0;
-            int x = 0;
-            var titleWidth = _model.DocumentWidthInches * _model.DPI - pageMargin * 2;
-
-            var month = 6;
-            var date = new DateTime(2019, month, 1,0,0,0);
-            x = (int)date.DayOfWeek;
-            int day = 1;
-            var daysInMonth = DateTime.DaysInMonth(2019, month);
-            var rowCount = (daysInMonth - (7-x)) / 7.0;
-            if (rowCount > 4)
-            {
-                y = -1;
-                titleWidth -= (dateBoxWidth * (7 - x));
-            }
-
-            var noteBackgroundBrush = new SolidColorBrush(Color.FromRgb(242, 242, 242));
-
-            // Draw a note taking box if there is room at the top
-            if (x > 0 && y > -1)
-            {
-                var noteBox = CreateDateBox(x * dateBoxWidth, dateBoxHeight, null);
-                noteBox.Background = noteBackgroundBrush;
-                pageCanvas.Children.Add(noteBox);
-                Canvas.SetTop(noteBox, pageMargin + pageTopArea);
-                Canvas.SetLeft(noteBox, pageMargin);
-            }
-
-            for (; y < rowsPerPage; y++)
-            {
-                for (; x < boxesPerRow; x++)
+                var titleWidth = _model.DocumentWidthInches * _model.DPI - pageMargin * 2;
+                var pageCanvas = new Canvas()
                 {
+                    Background = Brushes.White,
+                    ClipToBounds = true,
+                };
+                int y = 0;
 
-                    var dateBox = CreateDateBox(dateBoxWidth, dateBoxHeight, date.AddDays(day-1));
-                    day++;
-
-                    Canvas.SetTop(dateBox, y * dateBoxHeight + pageMargin + pageTopArea);
-                    Canvas.SetLeft(dateBox, x * dateBoxWidth + pageMargin);
-                    pageCanvas.Children.Add(dateBox);
-                    if (day > daysInMonth)
-                    {
-                        // draw a note taking box if there is room at the bottom
-                        if (x < boxesPerRow - 1)
-                        {
-                            var noteBox = CreateDateBox((boxesPerRow - x - 1) * dateBoxWidth, dateBoxHeight, null);
-                            noteBox.Background = noteBackgroundBrush;
-                            pageCanvas.Children.Add(noteBox);
-                            Canvas.SetTop(noteBox, pageMargin + y * dateBoxHeight + pageTopArea);
-                            Canvas.SetLeft(noteBox, pageMargin + (x +1)* dateBoxWidth);
-                        }
-
-                        var monthBox = CreateMonthbox(dateBoxWidth, dateBoxHeight, date.AddMonths(1));
-                        pageCanvas.Children.Add(monthBox);
-                        if (x < boxesPerRow - 1)
-                        {
-                            Canvas.SetTop(monthBox, pageMargin + y * dateBoxHeight + pageTopArea);
-                            Canvas.SetLeft(monthBox, pageMargin + 6 * dateBoxWidth);
-                        }
-                        else
-                        {
-                            Canvas.SetTop(monthBox, pageMargin + pageTopArea);
-                            Canvas.SetLeft(monthBox, pageMargin + 1 * dateBoxWidth);
-                        }
-
-                        monthBox = CreateMonthbox(dateBoxWidth, dateBoxHeight, date.AddMonths(-1));
-                        pageCanvas.Children.Add(monthBox);
-                        if (x < boxesPerRow - 2)
-                        {
-                            Canvas.SetTop(monthBox, pageMargin + y * dateBoxHeight + pageTopArea);
-                            Canvas.SetLeft(monthBox, pageMargin + 5 * dateBoxWidth);
-                        }
-                        else
-                        {
-                            Canvas.SetTop(monthBox, pageMargin + pageTopArea);
-                            Canvas.SetLeft(monthBox, pageMargin);
-                        }
-
-                        break;
-                    }
+                var date = new DateTime(year, month, 1);
+                var x = (int)date.DayOfWeek;
+                int day = 1;
+                var daysInMonth = DateTime.DaysInMonth(2019, month);
+                var rowCount = (daysInMonth - (7 - x)) / 7.0;
+                if (rowCount > 4)
+                {
+                    y = -1;
+                    titleWidth -= (dateBoxWidth * (7 - x));
                 }
-                x = 0;
+
+                var noteBackgroundBrush = new SolidColorBrush(Color.FromRgb(242, 242, 242));
+
+                // Draw a note taking box if there is room at the top
+                if (x > 0 && y > -1)
+                {
+                    var noteBox = CreateDateBox(x * dateBoxWidth, dateBoxHeight, null);
+                    noteBox.Background = noteBackgroundBrush;
+                    pageCanvas.Children.Add(noteBox);
+                    Canvas.SetTop(noteBox, pageMargin + pageTopArea);
+                    Canvas.SetLeft(noteBox, pageMargin);
+                }
+
+                for (; y < rowsPerPage; y++)
+                {
+                    for (; x < boxesPerRow; x++)
+                    {
+
+                        var dateBox = CreateDateBox(dateBoxWidth, dateBoxHeight, date.AddDays(day - 1));
+                        day++;
+
+                        Canvas.SetTop(dateBox, y * dateBoxHeight + pageMargin + pageTopArea);
+                        Canvas.SetLeft(dateBox, x * dateBoxWidth + pageMargin);
+                        pageCanvas.Children.Add(dateBox);
+                        if (day > daysInMonth)
+                        {
+                            // draw a note taking box if there is room at the bottom
+                            if (x < boxesPerRow - 1)
+                            {
+                                var noteBox = CreateDateBox((boxesPerRow - x - 1) * dateBoxWidth, dateBoxHeight, null);
+                                noteBox.Background = noteBackgroundBrush;
+                                pageCanvas.Children.Add(noteBox);
+                                Canvas.SetTop(noteBox, pageMargin + y * dateBoxHeight + pageTopArea);
+                                Canvas.SetLeft(noteBox, pageMargin + (x + 1) * dateBoxWidth);
+                            }
+
+                            var monthBox = CreateMonthbox(dateBoxWidth, dateBoxHeight, date.AddMonths(1));
+                            pageCanvas.Children.Add(monthBox);
+                            if (x < boxesPerRow - 1)
+                            {
+                                Canvas.SetTop(monthBox, pageMargin + y * dateBoxHeight + pageTopArea);
+                                Canvas.SetLeft(monthBox, pageMargin + 6 * dateBoxWidth);
+                            }
+                            else
+                            {
+                                Canvas.SetTop(monthBox, pageMargin + pageTopArea);
+                                Canvas.SetLeft(monthBox, pageMargin + 1 * dateBoxWidth);
+                            }
+
+                            monthBox = CreateMonthbox(dateBoxWidth, dateBoxHeight, date.AddMonths(-1));
+                            pageCanvas.Children.Add(monthBox);
+                            if (x < boxesPerRow - 2)
+                            {
+                                Canvas.SetTop(monthBox, pageMargin + y * dateBoxHeight + pageTopArea);
+                                Canvas.SetLeft(monthBox, pageMargin + 5 * dateBoxWidth);
+                            }
+                            else
+                            {
+                                Canvas.SetTop(monthBox, pageMargin + pageTopArea);
+                                Canvas.SetLeft(monthBox, pageMargin);
+                            }
+
+                            break;
+                        }
+                    }
+                    x = 0;
+                }
+
+                var titleLabel = new Label()
+                {
+                    Foreground = Brushes.Black,
+                    //Background = Brushes.Red,
+                    Content = "  " + date.ToString("MMMM").ToLower() + "  ",
+                    FontFamily = _model.TitleFontFamily,
+                    FontSize = (dateBoxHeight / _model.DPI) * 1.5 * 72,
+                    // FontWeight = FontWeights.UltraBold,
+                    Width = titleWidth,
+                    Height = dateBoxHeight * 2,
+                    VerticalContentAlignment = VerticalAlignment.Center,
+                    HorizontalContentAlignment = HorizontalAlignment.Center,
+                    Margin = new Thickness(0, -3 * _model.DPI, 0, 0)
+                };
+                titleLabel.RenderTransform = new ScaleTransform(1, 1.3);
+
+                pageCanvas.Children.Add(titleLabel);
+                Canvas.SetTop(titleLabel, pageMargin);
+                Canvas.SetLeft(titleLabel, pageMargin);
+
+                var yearLabel = new Label()
+                {
+                    Foreground = Brushes.Black,
+                    //Background = Brushes.Red,
+                    Content = "  " + date.ToString("yyyy") + "  ",
+                    FontFamily = _model.NumberFontFamily,
+                    FontSize = ((dateBoxHeight) * .25) / _model.DPI * 72,
+                    FontWeight = FontWeights.UltraBold,
+                    Width = titleWidth,
+                    Height = dateBoxHeight * .25,
+                    Padding = new Thickness(0),
+                    VerticalContentAlignment = VerticalAlignment.Center,
+                    HorizontalContentAlignment = HorizontalAlignment.Center,
+                };
+
+                pageCanvas.Children.Add(yearLabel);
+                Canvas.SetTop(yearLabel, pageMargin / 2);
+                Canvas.SetLeft(yearLabel, pageMargin);
+
+                var container = new Grid()
+                {
+                    Width = _model.DocumentPixelWidth,
+                    Height = _model.DocumentPixelHeight
+                };
+                container.Children.Add(pageCanvas);
+                _printablePages.Add(container);
+
+                month++;
+                if(month > 12)
+                {
+                    year++;
+                    month = 1;
+                }
+
+                if (year > endYear) break;
+                if (year == endYear && month > endMonth) break;
             }
 
-            var titleLabel = new Label()
-            {
-                Foreground = Brushes.Black,
-                //Background = Brushes.Red,
-                Content = "  " + date.ToString("MMMM").ToLower() + "  ",
-                FontFamily = _model.TitleFontFamily,
-                FontSize = (dateBoxHeight / _model.DPI) * 1.5 * 72,
-                // FontWeight = FontWeights.UltraBold,
-                Width = titleWidth,
-                Height = dateBoxHeight * 2,
-                VerticalContentAlignment = VerticalAlignment.Center,
-                HorizontalContentAlignment = HorizontalAlignment.Center,
-                Margin = new Thickness(0, -3 * _model.DPI, 0, 0)
-            };
-            titleLabel.RenderTransform = new ScaleTransform(1, 1.3);
-
-            pageCanvas.Children.Add(titleLabel);
-            Canvas.SetTop(titleLabel, pageMargin);
-            Canvas.SetLeft(titleLabel, pageMargin);
-
-            var yearLabel = new Label()
-            {
-                Foreground = Brushes.Black,
-                //Background = Brushes.Red,
-                Content = "  " + date.ToString("yyyy") + "  ",
-                FontFamily = _model.NumberFontFamily,
-                FontSize = ((dateBoxHeight) * .25) / _model.DPI * 72,
-                FontWeight = FontWeights.UltraBold,
-                Width = titleWidth,
-                Height = dateBoxHeight * .25,
-                Padding = new Thickness(0),
-                VerticalContentAlignment = VerticalAlignment.Center,
-                HorizontalContentAlignment = HorizontalAlignment.Center,
-            };
-
-            pageCanvas.Children.Add(yearLabel);
-            Canvas.SetTop(yearLabel, pageMargin/2);
-            Canvas.SetLeft(yearLabel, pageMargin);
-
-            var container = new Grid()
-            {
-                Width = _model.DocumentPixelWidth,
-                Height = _model.DocumentPixelHeight
-            };
-            container.Children.Add(pageCanvas);
-            _printablePages.Add(container);
-
+ 
             var pageSize = new Size(_model.DocumentPixelWidth, _model.DocumentPixelHeight);
             var document = new FixedDocument();
             document.DocumentPaginator.PageSize = pageSize;
