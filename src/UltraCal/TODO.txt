@@ -6,7 +6,7 @@
 		[x] Note taking areas where there are empty boxes
 		[x] Year Title
 		[x] Previous month/ next month, last two squares
-		[ ] Holidays  (https://calendarific.com/api-documentation)
+		[x] Holidays  (https://calendarific.com/api-documentation)
 			- Use a script to refresh holiday json files so you don't have to keep querying on every run
 			- Maybe query if the local data file is not already present
 			- api key: 57b5efbe22bb22a85c15dd4f1120562d7233a001

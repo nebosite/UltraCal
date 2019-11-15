@@ -14,6 +14,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -63,6 +64,7 @@ namespace UltraCal
             {
                 _first = false;
                 RecalculateLayout();
+                PageContainer.FitToHeight();
             }
             base.OnContentRendered(e);
         }
@@ -101,7 +103,6 @@ namespace UltraCal
             double dateBoxHeight = (_model.DocumentPixelHeight - pageTopArea - pageMargin * 2) / rowsPerPage;
 
             _printablePages.Clear();
-            PageContainer.Children.Clear();
 
             var pageCanvas = new Canvas()
             {
@@ -231,16 +232,39 @@ namespace UltraCal
             Canvas.SetTop(yearLabel, pageMargin/2);
             Canvas.SetLeft(yearLabel, pageMargin);
 
-
             var container = new Grid()
             {
                 Width = _model.DocumentPixelWidth,
                 Height = _model.DocumentPixelHeight
             };
             container.Children.Add(pageCanvas);
+            _printablePages.Add(container);
 
-            PageContainer.Children.Add(container);
-            _printablePages.Add(pageCanvas);
+            var pageSize = new Size(_model.DocumentPixelWidth, _model.DocumentPixelHeight);
+            var document = new FixedDocument();
+            document.DocumentPaginator.PageSize = pageSize;
+
+            foreach (var xamlPage in _printablePages)
+            {
+                // Create FixedPage
+                var fixedPage = new FixedPage();
+                fixedPage.Width = pageSize.Width;
+                fixedPage.Height = pageSize.Height;
+                // Add visual, measure/arrange page.
+                fixedPage.Children.Add((UIElement)xamlPage);
+                fixedPage.Measure(pageSize);
+                fixedPage.Arrange(new Rect(new Point(), pageSize));
+                fixedPage.UpdateLayout();
+
+                // Add page to document
+                var pageContent = new PageContent();
+                ((IAddChild)pageContent).AddChild(fixedPage);
+                document.Pages.Add(pageContent);
+
+            }
+
+            PageContainer.Document = document;
+
         }
 
         //-----------------------------------------------------------------------------
@@ -403,20 +427,6 @@ namespace UltraCal
             return dateBox;
         }
 
-        //-----------------------------------------------------------------------------
-        /// <summary>
-        /// 
-        /// </summary>
-        //-----------------------------------------------------------------------------
-        private void UpdatePreviewClick(object sender, RoutedEventArgs e)
-        {
-            if (_printablePages.Count == 0) return;
-            var printDialog = new PrintDialog();
-            if (printDialog.ShowDialog() == true)
-            {
-                printDialog.PrintVisual(_printablePages[0], "Page of Cards");
-            }
-        }
 
         private static readonly Regex _numberOnlyRegex = new Regex("^[0-9.]+"); 
 

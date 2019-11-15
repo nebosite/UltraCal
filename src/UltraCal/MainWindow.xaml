@@ -19,35 +19,18 @@
                     <ColumnDefinition Width="30*" />
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0">
-                    <StackPanel Orientation="Horizontal">
-                        <Button Content="Print" Click="UpdatePreviewClick" />
-                    </StackPanel>
                 </StackPanel>
                 <StackPanel Grid.Column="1">
-                    <Label Content="Card Dimentsions" FontWeight="Bold"/>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Units:" HorizontalContentAlignment="Right" Width="60"/>
-                        <ComboBox ItemsSource="{Binding AvailableUnits}" SelectedItem="{Binding SelectedUnits}" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Width:" HorizontalContentAlignment="Right" Width="90"/>
-                        <TextBox Text="{Binding CardWidth}" PreviewTextInput="PreviewNumericInput" Width="40" VerticalAlignment="Center" />
-                        <Label Content="Height:" HorizontalContentAlignment="Right" Width="90"/>
-                        <TextBox Text="{Binding CardHeight}" PreviewTextInput="PreviewNumericInput" Width="40" VerticalAlignment="Center" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="OverDraw:" HorizontalContentAlignment="Right" Width="90"/>
-                        <TextBox Text="{Binding OverDraw}" PreviewTextInput="PreviewNumericInput" Width="40" VerticalAlignment="Center" />
-                        <Label Content="MinMargin:" HorizontalContentAlignment="Right" Width="90"/>
-                        <TextBox Text="{Binding MinMargin}" PreviewTextInput="PreviewNumericInput" Width="40" VerticalAlignment="Center" />
-                    </StackPanel>
                 </StackPanel>
             </Grid>
         </Grid>
         <Grid Grid.Row="1" Background="LightGray">
+            <DocumentViewer  x:Name="PageContainer">
+                
+            </DocumentViewer>
+                    <!--
             <ScrollViewer HorizontalScrollBarVisibility="Visible">
                 <StackPanel x:Name="PageContainer" LayoutTransform="{Binding DocumentLayoutTransform}">
-                    <!--
                     <Grid 
                         Width="{Binding DocumentPixelWidth}" 
                         Height="{Binding DocumentPixelHeight}"  >
@@ -58,9 +41,9 @@
                             <Ellipse Fill="LightYellow" Width="257" Height="195" Canvas.Left="-56" Canvas.Top="935.3" />
                             <Ellipse Fill="LightGray" Width="257" Height="195" Canvas.Left="680" Canvas.Top="935" />
                         </Canvas>
-                    </Grid>-->
+                    </Grid>
                 </StackPanel>
-            </ScrollViewer>
+            </ScrollViewer>-->
         </Grid>
     </Grid>
 </Window>
