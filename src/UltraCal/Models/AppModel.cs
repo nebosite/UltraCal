@@ -54,7 +54,7 @@ namespace UltraCal
 
         public FontFamily TitleFontFamily { get; set; }
         public FontFamily NumberFontFamily { get; set; }
-        public double DateNumberHeightFraction => .14;
+        public double DateNumberHeightFraction => .12;
 
         private Dictionary<int, Dictionary<int, Holiday>> _holidayLookup;
         private readonly string DataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "UltraCal");

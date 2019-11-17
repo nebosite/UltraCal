@@ -8,20 +8,16 @@
         Title="MainWindow" Height="1000" Width="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="110" />
+            <RowDefinition Height="25" />
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Background="LightBlue">
             <Grid>
-                <StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Start Date:" Width="100" HorizontalContentAlignment="Right" />
-                        <DatePicker SelectedDate="{Binding StartDate}" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="End Date:" Width="100" HorizontalContentAlignment="Right" />
-                        <DatePicker SelectedDate="{Binding EndDate}" />
-                    </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Start Date:" Width="100" HorizontalContentAlignment="Right" />
+                    <DatePicker SelectedDate="{Binding StartDate}" />
+                    <Label Content="End Date:" Width="100" HorizontalContentAlignment="Right" />
+                    <DatePicker SelectedDate="{Binding EndDate}" />
                 </StackPanel>
             </Grid>
         </Grid>

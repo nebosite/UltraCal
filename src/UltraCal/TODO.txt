@@ -13,7 +13,13 @@
 			- https://calendarific.com/api/v2
 			- Example: https://calendarific.com/api/v2/json?api_key=57b5efbe22bb22a85c15dd4f1120562d7233a001&country=US&year=2020
 
-		[ ] Generate N Months starting from date
+		[x] Generate N Months starting from date
+		[x] Smaller holiday text
+		[x] Leap years missing last day (Feb 2020)
+		[x] Smaller numbers
+		[x] Day names on the top
+		[ ] Day letter on the mini months
+		[ ] Bold mini month names
 		[ ] Lunar cycles
 			https://www.codeproject.com/articles/100174/calculate-and-draw-moon-phase
 	[ ] Extras:

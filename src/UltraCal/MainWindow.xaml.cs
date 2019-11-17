@@ -92,7 +92,7 @@ namespace UltraCal
         private void RecalculateLayout()
         {
             double pageMargin = .5 * _model.DPI;
-            double pageTopArea = 4 * _model.DPI;
+            double pageTopAreaHeight = 4 * _model.DPI;
 
             int boxesPerRow = 7;
             int rowsPerPage = 5;
@@ -100,7 +100,7 @@ namespace UltraCal
             if (rowsPerPage * boxesPerRow == 0) return;
 
             double dateBoxWidth = (_model.DocumentPixelWidth - pageMargin * 2) / boxesPerRow;
-            double dateBoxHeight = (_model.DocumentPixelHeight - pageTopArea - pageMargin * 2) / rowsPerPage;
+            double dateBoxHeight = (_model.DocumentPixelHeight - pageTopAreaHeight - pageMargin * 2) / rowsPerPage;
 
             _printablePages.Clear();
 
@@ -122,7 +122,7 @@ namespace UltraCal
                 var date = new DateTime(year, month, 1);
                 var x = (int)date.DayOfWeek;
                 int day = 1;
-                var daysInMonth = DateTime.DaysInMonth(2019, month);
+                var daysInMonth = DateTime.DaysInMonth(year, month);
                 var rowCount = (daysInMonth - (7 - x)) / 7.0;
                 if (rowCount > 4)
                 {
@@ -138,7 +138,7 @@ namespace UltraCal
                     var noteBox = CreateDateBox(x * dateBoxWidth, dateBoxHeight, null);
                     noteBox.Background = noteBackgroundBrush;
                     pageCanvas.Children.Add(noteBox);
-                    Canvas.SetTop(noteBox, pageMargin + pageTopArea);
+                    Canvas.SetTop(noteBox, pageMargin + pageTopAreaHeight);
                     Canvas.SetLeft(noteBox, pageMargin);
                 }
 
@@ -146,11 +146,10 @@ namespace UltraCal
                 {
                     for (; x < boxesPerRow; x++)
                     {
+                        var thisDate = date.AddDays(day - 1);
+                        var dateBox = CreateDateBox(dateBoxWidth, dateBoxHeight, thisDate);
 
-                        var dateBox = CreateDateBox(dateBoxWidth, dateBoxHeight, date.AddDays(day - 1));
-                        day++;
-
-                        Canvas.SetTop(dateBox, y * dateBoxHeight + pageMargin + pageTopArea);
+                        Canvas.SetTop(dateBox, y * dateBoxHeight + pageMargin + pageTopAreaHeight);
                         Canvas.SetLeft(dateBox, x * dateBoxWidth + pageMargin);
                         pageCanvas.Children.Add(dateBox);
                         if (day > daysInMonth)
@@ -160,39 +159,71 @@ namespace UltraCal
                             {
                                 var noteBox = CreateDateBox((boxesPerRow - x - 1) * dateBoxWidth, dateBoxHeight, null);
                                 noteBox.Background = noteBackgroundBrush;
-                                pageCanvas.Children.Add(noteBox);
-                                Canvas.SetTop(noteBox, pageMargin + y * dateBoxHeight + pageTopArea);
+                                pageCanvas.Children.Insert(0,noteBox);
+                                Canvas.SetTop(noteBox, pageMargin + y * dateBoxHeight + pageTopAreaHeight);
                                 Canvas.SetLeft(noteBox, pageMargin + (x + 1) * dateBoxWidth);
                             }
 
+                            // Draw Previous month mini box
                             var monthBox = CreateMonthbox(dateBoxWidth, dateBoxHeight, date.AddMonths(1));
-                            pageCanvas.Children.Add(monthBox);
+                            pageCanvas.Children.Insert(1,monthBox);
                             if (x < boxesPerRow - 1)
                             {
-                                Canvas.SetTop(monthBox, pageMargin + y * dateBoxHeight + pageTopArea);
+                                Canvas.SetTop(monthBox, pageMargin + y * dateBoxHeight + pageTopAreaHeight);
                                 Canvas.SetLeft(monthBox, pageMargin + 6 * dateBoxWidth);
                             }
                             else
                             {
-                                Canvas.SetTop(monthBox, pageMargin + pageTopArea);
+                                Canvas.SetTop(monthBox, pageMargin + pageTopAreaHeight);
                                 Canvas.SetLeft(monthBox, pageMargin + 1 * dateBoxWidth);
                             }
 
+                            // Draw next month mini box
                             monthBox = CreateMonthbox(dateBoxWidth, dateBoxHeight, date.AddMonths(-1));
-                            pageCanvas.Children.Add(monthBox);
+                            pageCanvas.Children.Insert(1,monthBox);
                             if (x < boxesPerRow - 2)
                             {
-                                Canvas.SetTop(monthBox, pageMargin + y * dateBoxHeight + pageTopArea);
+                                Canvas.SetTop(monthBox, pageMargin + y * dateBoxHeight + pageTopAreaHeight);
                                 Canvas.SetLeft(monthBox, pageMargin + 5 * dateBoxWidth);
                             }
                             else
                             {
-                                Canvas.SetTop(monthBox, pageMargin + pageTopArea);
+                                Canvas.SetTop(monthBox, pageMargin + pageTopAreaHeight);
                                 Canvas.SetLeft(monthBox, pageMargin);
                             }
 
                             break;
                         }
+
+                        // Draw day labels
+                        if (day <= 7)
+                        {
+                            var dayName = thisDate.ToString("dddd").ToLower();
+                            var dayHeight = dateBoxHeight * .3;
+
+                            var dayLabel = new Label()
+                            {
+                                Foreground = Brushes.Black,
+                                //Background = Brushes.Cyan,
+                                Content = dayName,
+                                FontFamily = _model.TitleFontFamily,
+                                FontSize = (dayHeight / _model.DPI) * .8 * 72,
+                                //FontWeight = FontWeights.SemiBold,
+                                Width = dateBoxWidth,
+                                Height = dayHeight,
+                                VerticalContentAlignment = VerticalAlignment.Bottom,
+                                HorizontalContentAlignment = HorizontalAlignment.Center,
+                            };
+
+                            var dayY = y;
+                            if (dayY > 0) dayY = 0;
+                            pageCanvas.Children.Add(dayLabel);
+                            Canvas.SetTop(dayLabel, pageMargin + dateBoxHeight * dayY + pageTopAreaHeight - dayHeight * .85);
+                            Canvas.SetLeft(dayLabel, pageMargin + dateBoxWidth * x);
+                        }
+                        day++;
+
+
                     }
                     x = 0;
                 }
@@ -209,7 +240,7 @@ namespace UltraCal
                     Height = dateBoxHeight * 2,
                     VerticalContentAlignment = VerticalAlignment.Center,
                     HorizontalContentAlignment = HorizontalAlignment.Center,
-                    Margin = new Thickness(0, -3 * _model.DPI, 0, 0)
+                    Margin = new Thickness(0, -3.5 * _model.DPI, 0, 0)
                 };
                 titleLabel.RenderTransform = new ScaleTransform(1, 1.3);
 
@@ -419,7 +450,7 @@ namespace UltraCal
                 });
 
                 var smallLabelHeight = height * 0.13;
-                var smallFontSize = smallLabelHeight / _model.DPI * 72 * .6;
+                var smallFontSize = smallLabelHeight / _model.DPI * 72 * .4;
 
                 var holiday = _model.GetHoliday(date.Value);
                 if(holiday != null)
@@ -433,7 +464,7 @@ namespace UltraCal
                         Width = width,
                         Height = smallLabelHeight,
                         HorizontalContentAlignment = HorizontalAlignment.Center,
-                        VerticalContentAlignment = VerticalAlignment.Center,
+                        VerticalContentAlignment = VerticalAlignment.Bottom,
                         VerticalAlignment = VerticalAlignment.Bottom
                     };
                     dateBox.Children.Add(smallText);
