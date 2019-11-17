@@ -1,8 +1,21 @@
 ﻿TODO
-	[ ] Janet feedback
 
 
-	[ ] For Janet
+	[ ] Extras:
+		[ ] Column headers
+		[ ] Mail merge special Dates
+		[ ] Select Font
+		[ ] Control Font dimentions
+		[ ] Day of year/ day remaining
+		[ ] Monthly TODO checkboxes 
+
+
+	[ ] Printing at Staples: Color Blueprints 18"x24"  https://documents.staples.com/ASP1/SmartStore.aspx?QxwAkrpHdoTpJQ4/NUWILGhXVTrEwdxHw8Lxmdsq0ed5ORARK3ida94N9LnWhlVT#!/CategoryHome/243
+
+
+=========== DONE ===========================================
+
+	[x] For Janet
 		[x] Note taking areas where there are empty boxes
 		[x] Year Title
 		[x] Previous month/ next month, last two squares
@@ -20,22 +33,8 @@
 		[x] Day names on the top
 		[x] Day letter on the mini months
 		[x] Bold mini month names
-		[ ] Lunar cycles
+		[x] Lunar cycles
 			https://www.codeproject.com/articles/100174/calculate-and-draw-moon-phase
-	[ ] Extras:
-		[ ] Column headers
-		[ ] Mail merge special Dates
-		[ ] Select Font
-		[ ] Control Font dimentions
-		[ ] Day of year/ day remaining
-		[ ] Monthly TODO checkboxes 
-
-
-	[ ] Printing at Staples: Color Blueprints 18"x24"  https://documents.staples.com/ASP1/SmartStore.aspx?QxwAkrpHdoTpJQ4/NUWILGhXVTrEwdxHw8Lxmdsq0ed5ORARK3ida94N9LnWhlVT#!/CategoryHome/243
-
-
-=========== DONE ===========================================
-
 
 	[x] Calendar parts:
 		[x] Better Borders for date boxes

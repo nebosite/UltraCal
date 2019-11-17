@@ -428,6 +428,8 @@ namespace UltraCal
         //-----------------------------------------------------------------------------
         Grid CreateDateBox(double width, double height, DateTime? date = null)
         {
+            var boxHeightInches = height / _model.DPI;
+
             var dateBox = new Grid()
             {
                 Width = width,
@@ -435,6 +437,32 @@ namespace UltraCal
                 Tag = "DateBox: " + date
             };
 
+            if (date != null)
+            {
+                var phase = MoonHelper.GetMoonPhase(date.Value);
+                char phaseText = (char)0;
+                switch (phase)
+                {
+                    case LunarPhase.New: phaseText = (char)0x98; break;
+                    case LunarPhase.Full: phaseText = (char)0x9A; break;
+                }
+                if (phaseText != (char)0)
+                {
+                    dateBox.Children.Add(new Label()
+                    {
+                        Foreground = Brushes.Gray,
+                        Content = phaseText,
+                        FontFamily = new FontFamily("Wingdings 2"),
+                        FontSize = boxHeightInches * _model.DateNumberHeightFraction * 72,
+                        FontWeight = FontWeights.Bold,
+                        Width = width,
+                        Height = height,
+                        VerticalAlignment = VerticalAlignment.Top,
+                        HorizontalContentAlignment = HorizontalAlignment.Right,
+                    });
+
+                }
+            }
 
             var lineStacker = new StackPanel()
             {
@@ -464,7 +492,6 @@ namespace UltraCal
 
             if(date != null)
             {
-                var boxHeightInches = height / _model.DPI;
                 dateBox.Children.Add(new Label()
                 {
                     Foreground = Brushes.Black,
