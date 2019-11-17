@@ -142,6 +142,8 @@ namespace UltraCal
                     Canvas.SetLeft(noteBox, pageMargin);
                 }
 
+                var daylabels = new List<Label>();
+
                 for (; y < rowsPerPage; y++)
                 {
                     for (; x < boxesPerRow; x++)
@@ -152,22 +154,24 @@ namespace UltraCal
                         Canvas.SetTop(dateBox, y * dateBoxHeight + pageMargin + pageTopAreaHeight);
                         Canvas.SetLeft(dateBox, x * dateBoxWidth + pageMargin);
                         pageCanvas.Children.Add(dateBox);
-                        if (day > daysInMonth)
+                        
+                        if (day >= daysInMonth)
                         {
+                            int boxesRemaining = boxesPerRow - x - 1;
                             // draw a note taking box if there is room at the bottom
-                            if (x < boxesPerRow - 1)
+                            if (boxesRemaining > 0)
                             {
                                 var noteBox = CreateDateBox((boxesPerRow - x - 1) * dateBoxWidth, dateBoxHeight, null);
                                 noteBox.Background = noteBackgroundBrush;
-                                pageCanvas.Children.Insert(0,noteBox);
+                                pageCanvas.Children.Insert(0, noteBox);
                                 Canvas.SetTop(noteBox, pageMargin + y * dateBoxHeight + pageTopAreaHeight);
                                 Canvas.SetLeft(noteBox, pageMargin + (x + 1) * dateBoxWidth);
                             }
 
-                            // Draw Previous month mini box
+                            // Draw Next month mini box
                             var monthBox = CreateMonthbox(dateBoxWidth, dateBoxHeight, date.AddMonths(1));
-                            pageCanvas.Children.Insert(1,monthBox);
-                            if (x < boxesPerRow - 1)
+                            pageCanvas.Children.Add( monthBox);
+                            if (boxesRemaining > 0)
                             {
                                 Canvas.SetTop(monthBox, pageMargin + y * dateBoxHeight + pageTopAreaHeight);
                                 Canvas.SetLeft(monthBox, pageMargin + 6 * dateBoxWidth);
@@ -178,10 +182,10 @@ namespace UltraCal
                                 Canvas.SetLeft(monthBox, pageMargin + 1 * dateBoxWidth);
                             }
 
-                            // Draw next month mini box
+                            // Draw Previous month mini box
                             monthBox = CreateMonthbox(dateBoxWidth, dateBoxHeight, date.AddMonths(-1));
-                            pageCanvas.Children.Insert(1,monthBox);
-                            if (x < boxesPerRow - 2)
+                            pageCanvas.Children.Add( monthBox);
+                            if (boxesRemaining > 1)
                             {
                                 Canvas.SetTop(monthBox, pageMargin + y * dateBoxHeight + pageTopAreaHeight);
                                 Canvas.SetLeft(monthBox, pageMargin + 5 * dateBoxWidth);
@@ -217,7 +221,7 @@ namespace UltraCal
 
                             var dayY = y;
                             if (dayY > 0) dayY = 0;
-                            pageCanvas.Children.Add(dayLabel);
+                            daylabels.Add(dayLabel);
                             Canvas.SetTop(dayLabel, pageMargin + dateBoxHeight * dayY + pageTopAreaHeight - dayHeight * .85);
                             Canvas.SetLeft(dayLabel, pageMargin + dateBoxWidth * x);
                         }
@@ -227,6 +231,8 @@ namespace UltraCal
                     }
                     x = 0;
                 }
+
+                daylabels.ForEach(l => pageCanvas.Children.Add(l));
 
                 var titleLabel = new Label()
                 {
@@ -326,6 +332,7 @@ namespace UltraCal
                 Background = Brushes.White,
                 Width = width,
                 Height = height,
+                Tag = "MonthBox: " + boxDate.ToString()
             };
 
             var lineStacker = new StackPanel()
@@ -338,8 +345,8 @@ namespace UltraCal
             var margin = columnWidth / 2;
             var contentWidth = columnWidth * 7;
             var contentHeight = height - columnWidth;
-            var rowHeight = contentHeight / 7;
-            var fontSize = rowHeight * .8 / _model.DPI * 72 * .6;
+            var rowHeight = contentHeight / 9;
+            var fontSize = rowHeight * 1 / _model.DPI * 72 * .6;
 
             lineStacker.Margin = new Thickness(margin);
 
@@ -349,15 +356,34 @@ namespace UltraCal
                 Content = boxDate.ToString("MMMM").ToLower(),
                 FontFamily = _model.NumberFontFamily,
                 FontSize = fontSize * 1.5,
+                FontWeight = FontWeights.UltraBold,
                 Width = contentWidth,
-                Height = rowHeight,
+                Height = rowHeight * 1.5,
                 HorizontalContentAlignment = HorizontalAlignment.Center,
                 VerticalContentAlignment = VerticalAlignment.Center,
             });
 
+            var rowStack = new StackPanel() { Orientation = Orientation.Horizontal };
+            lineStacker.Children.Add(rowStack);
+            var dayLetters = "smtwtfs";
+            for(int i = 0; i < 7; i++)
+            {
+                var littleBox = new Label()
+                {
+                    Content = dayLetters[i],
+                    FontFamily = _model.NumberFontFamily,
+                    FontSize = fontSize,
+                    FontWeight = FontWeights.Bold,
+                    Width = columnWidth,
+                    Height = rowHeight,
+                    HorizontalContentAlignment = HorizontalAlignment.Center,
+                    VerticalContentAlignment = VerticalAlignment.Center,
+                };
+                rowStack.Children.Add(littleBox);
+            }
             int day = 1 - (int)boxDate.DayOfWeek;;
             int x = 0;
-            var rowStack = new StackPanel() { Orientation = Orientation.Horizontal };
+            rowStack = new StackPanel() { Orientation = Orientation.Horizontal };
             lineStacker.Children.Add(rowStack);
             while(true)
             {
@@ -406,6 +432,7 @@ namespace UltraCal
             {
                 Width = width,
                 Height = height,
+                Tag = "DateBox: " + date
             };
 
 

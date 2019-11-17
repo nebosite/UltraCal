@@ -18,8 +18,8 @@
 		[x] Leap years missing last day (Feb 2020)
 		[x] Smaller numbers
 		[x] Day names on the top
-		[ ] Day letter on the mini months
-		[ ] Bold mini month names
+		[x] Day letter on the mini months
+		[x] Bold mini month names
 		[ ] Lunar cycles
 			https://www.codeproject.com/articles/100174/calculate-and-draw-moon-phase
 	[ ] Extras:
