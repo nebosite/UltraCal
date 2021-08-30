@@ -66,17 +66,23 @@ namespace UltraCal
         //-------------------------------------------------------------------------------
         public AppModel()
         {
-
+            TitleFontFamily = new FontFamily("Lucida Calligraphy");
+            NumberFontFamily = new FontFamily("Arial");
             foreach (FontFamily fontFamily in Fonts.GetFontFamilies(@"C:\Windows\fonts"))
             {
                 // Add the font family name to the fonts combo box.
                 System.Diagnostics.Debug.WriteLine(fontFamily.Source);
-                if(fontFamily.Source.Contains("fuego"))
+                if(fontFamily.Source.Contains("fonts#Cienfuegos"))
                 {
+                    Debug.WriteLine("Found font: Cienfuegos");
                     TitleFontFamily = fontFamily;
                 }
+                if(fontFamily.Source.Contains("fonts#Lato Hairline"))
+                {
+                    Debug.WriteLine("Found font: Lato Light");
+                    NumberFontFamily = fontFamily;// new FontFamily("Lato Light");
+                }
             }
-            NumberFontFamily = new FontFamily("Lato Light");
             RaisePropertyChanged(LAYOUT);
         }
 
@@ -163,8 +169,9 @@ namespace UltraCal
         //-------------------------------------------------------------------------------
         private string QueryHolidayServer(int year)
         {
-            var template = "https://calendarific.com/api/v2/json?api_key=57b5efbe22bb22a85c15dd4f1120562d7233a001&country={0}&year={1}";
+            var template = "https://calendarific.com/api/v2/holidays?api_key=57b5efbe22bb22a85c15dd4f1120562d7233a001&country={0}&year={1}";
             var baseUri = string.Format(template, "US", year);
+            Debug.WriteLine($"Attempting to call holiday API: {baseUri}");
             return RestCall(baseUri);
         }
 
